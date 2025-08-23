@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import contactImage from "../assets/contact-image.jpg"; // replace with your image
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -27,7 +28,6 @@ export default function Contact() {
     });
   };
 
-  // Simple front-end validation
   const validate = () => {
     const newErrors = {};
     if (!formData.name) newErrors.name = "Name is required";
@@ -37,27 +37,13 @@ export default function Contact() {
     return newErrors;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length === 0) {
       setErrors({});
       setSuccess(true);
-
-      // Placeholder for API integration
-      try {
-        // Example: POST formData to backend API
-        await fetch("https://your-api-endpoint.com/leads", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        });
-      } catch (err) {
-        console.error("API error", err);
-      }
-
       setTimeout(() => setSuccess(false), 5000);
-
       setFormData({
         name: "",
         email: "",
@@ -76,7 +62,6 @@ export default function Contact() {
     }
   };
 
-  // Simple mortgage calculation
   const calculateMortgage = () => {
     const P = Number(formData.propertyValue || 0);
     const r = Number(formData.mortgageRate || 0) / 100 / 12;
@@ -87,178 +72,182 @@ export default function Contact() {
   };
 
   return (
-    <section className="py-20 bg-white dark:from-gray-800 dark:to-gray-900">
-      <motion.div
-        className="max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-10"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-      >
-        <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-6 text-center">
-          Get in Touch & Stay Updated
-        </h2>
+    <section className="py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
+        {/* Left Column: Image / Info */}
+        <motion.div
+          className="hidden lg:flex justify-center"
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <div className="relative w-full max-w-md rounded-2xl overflow-hidden shadow-xl">
+            <img
+              src={contactImage}
+              alt="Contact Illustration"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute bottom-0 left-0 p-6 bg-gradient-to-t from-white/90 to-transparent w-full">
+              <h3 className="text-xl font-bold text-gray-800 mb-2">
+                Reach Out Anytime
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Our team is ready to assist you with property inquiries, valuations, and expert advice.
+              </p>
+            </div>
+          </div>
+        </motion.div>
 
-        {success && (
-          <motion.div
-            className="bg-green-100 text-green-700 p-4 rounded mb-6 text-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            Thank you! Your submission has been received.
-          </motion.div>
-        )}
+        {/* Right Column: Form */}
+        <motion.div
+          className="bg-white rounded-2xl shadow-lg p-8 lg:p-10"
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center lg:text-left">
+            Get in Touch
+          </h2>
 
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          {/* Name & Email */}
-          <div className="grid md:grid-cols-2 gap-4">
-            <motion.div whileHover={{ scale: 1.02 }}>
+          {success && (
+            <motion.div
+              className="bg-green-100 text-green-700 p-4 rounded mb-6 text-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              Thank you! Your submission has been received.
+            </motion.div>
+          )}
+
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <div className="grid md:grid-cols-2 gap-4">
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Name *"
-                className="w-full p-3 rounded border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:text-white transition"
+                className="w-full p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
               />
               {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
-            </motion.div>
-
-            <motion.div whileHover={{ scale: 1.02 }}>
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Email *"
-                className="w-full p-3 rounded border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:text-white transition"
+                className="w-full p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
               />
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-            </motion.div>
-          </div>
+            </div>
 
-          {/* Phone & Property Interest */}
-          <div className="grid md:grid-cols-2 gap-4">
-            <motion.input
-              whileHover={{ scale: 1.02 }}
-              type="text"
-              name="phone"
-              value={formData.phone}
+            <div className="grid md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="Phone"
+                className="w-full p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              />
+              <select
+                name="interest"
+                value={formData.interest}
+                onChange={handleChange}
+                className="w-full p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              >
+                <option value="">Property Interest</option>
+                <option value="buying">Buying</option>
+                <option value="selling">Selling</option>
+                <option value="investment">Investment</option>
+              </select>
+            </div>
+
+            <textarea
+              name="message"
+              value={formData.message}
               onChange={handleChange}
-              placeholder="Phone"
-              className="w-full p-3 rounded border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:text-white transition"
+              placeholder="Message"
+              className="w-full p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             />
-            <motion.select
-              whileHover={{ scale: 1.02 }}
-              name="interest"
-              value={formData.interest}
-              onChange={handleChange}
-              className="w-full p-3 rounded border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:text-white transition"
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <select
+                name="contactMethod"
+                value={formData.contactMethod}
+                onChange={handleChange}
+                className="w-full p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              >
+                <option value="">Preferred Contact Method</option>
+                <option value="email">Email</option>
+                <option value="phone">Phone</option>
+                <option value="whatsapp">WhatsApp</option>
+              </select>
+              <input
+                type="text"
+                name="budget"
+                value={formData.budget}
+                onChange={handleChange}
+                placeholder="Budget Range"
+                className="w-full p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="newsletter"
+                checked={formData.newsletter}
+                onChange={handleChange}
+                className="w-4 h-4 rounded focus:ring-2 focus:ring-blue-400"
+              />
+              <label className="text-gray-700">
+                Subscribe to property alerts & newsletter
+              </label>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-4 mt-4">
+              <input
+                type="number"
+                name="propertyValue"
+                value={formData.propertyValue}
+                onChange={handleChange}
+                placeholder="Property Value ($)"
+                className="w-full p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              />
+              <input
+                type="number"
+                name="mortgageTerm"
+                value={formData.mortgageTerm}
+                onChange={handleChange}
+                placeholder="Term (Years)"
+                className="w-full p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              />
+              <input
+                type="number"
+                name="mortgageRate"
+                value={formData.mortgageRate}
+                onChange={handleChange}
+                placeholder="Interest Rate (%)"
+                className="w-full p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              />
+            </div>
+
+            {formData.propertyValue && formData.mortgageTerm && formData.mortgageRate && (
+              <p className="mt-2 text-gray-700">
+                Estimated Monthly Payment: ${calculateMortgage()}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              className="w-full mt-6 bg-blue-600 text-white p-3 rounded font-semibold hover:bg-blue-700 transition"
             >
-              <option value="">Property Interest</option>
-              <option value="buying">Buying</option>
-              <option value="selling">Selling</option>
-              <option value="investment">Investment</option>
-            </motion.select>
-          </div>
-
-          {/* Message */}
-          <motion.textarea
-            whileHover={{ scale: 1.02 }}
-            name="message"
-            value={formData.message}
-            onChange={handleChange}
-            placeholder="Message"
-            className="w-full p-3 rounded border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:text-white transition"
-          />
-
-          {/* Contact Method & Budget */}
-          <div className="grid md:grid-cols-2 gap-4">
-            <motion.select
-              whileHover={{ scale: 1.02 }}
-              name="contactMethod"
-              value={formData.contactMethod}
-              onChange={handleChange}
-              className="w-full p-3 rounded border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:text-white transition"
-            >
-              <option value="">Preferred Contact Method</option>
-              <option value="email">Email</option>
-              <option value="phone">Phone</option>
-              <option value="whatsapp">WhatsApp</option>
-            </motion.select>
-
-            <motion.input
-              whileHover={{ scale: 1.02 }}
-              type="text"
-              name="budget"
-              value={formData.budget}
-              onChange={handleChange}
-              placeholder="Budget Range"
-              className="w-full p-3 rounded border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:text-white transition"
-            />
-          </div>
-
-          {/* Newsletter Signup */}
-          <motion.div whileHover={{ scale: 1.02 }} className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              name="newsletter"
-              checked={formData.newsletter}
-              onChange={handleChange}
-              className="w-4 h-4 rounded focus:ring-2 focus:ring-blue-400"
-            />
-            <label className="text-gray-700 dark:text-gray-300">
-              Subscribe to property alerts & newsletter
-            </label>
-          </motion.div>
-
-          {/* Property Valuation / Mortgage Calculator */}
-          <div className="grid md:grid-cols-3 gap-4 mt-4">
-            <motion.input
-              whileHover={{ scale: 1.02 }}
-              type="number"
-              name="propertyValue"
-              value={formData.propertyValue}
-              onChange={handleChange}
-              placeholder="Property Value ($)"
-              className="w-full p-3 rounded border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:text-white transition"
-            />
-            <motion.input
-              whileHover={{ scale: 1.02 }}
-              type="number"
-              name="mortgageTerm"
-              value={formData.mortgageTerm}
-              onChange={handleChange}
-              placeholder="Term (Years)"
-              className="w-full p-3 rounded border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:text-white transition"
-            />
-            <motion.input
-              whileHover={{ scale: 1.02 }}
-              type="number"
-              name="mortgageRate"
-              value={formData.mortgageRate}
-              onChange={handleChange}
-              placeholder="Interest Rate (%)"
-              className="w-full p-3 rounded border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:text-white transition"
-            />
-          </div>
-
-          {formData.propertyValue && formData.mortgageTerm && formData.mortgageRate && (
-            <p className="mt-2 text-gray-700 dark:text-gray-300">
-              Estimated Monthly Payment: ${calculateMortgage()}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            className="w-full mt-6 bg-blue-600 text-white p-3 rounded font-semibold hover:bg-blue-700 transition"
-          >
-            Submit
-          </button>
-        </form>
-      </motion.div>
+              Submit
+            </button>
+          </form>
+        </motion.div>
+      </div>
     </section>
   );
-
-  
 }

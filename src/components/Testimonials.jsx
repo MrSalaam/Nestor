@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-import { FaStar, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 
 const testimonials = [
   {
@@ -34,61 +33,76 @@ const testimonials = [
     text: "Professional, attentive, and effective. Made everything smooth and simple.",
     rating: 5,
   },
+  {
+    id: 5,
+    name: "Emma Watson",
+    role: "Home Buyer",
+    image: "https://images.unsplash.com/photo-1520813792240-56fc4a3765a7",
+    text: "Exceptional service and guidance! Made buying a house easy and enjoyable.",
+    rating: 5,
+  },
+  {
+    id: 6,
+    name: "Liam Johnson",
+    role: "Investor",
+    image: "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c",
+    text: "Amazing experience. They helped me invest wisely and efficiently.",
+    rating: 5,
+  },
 ];
 
 export default function Testimonials() {
-  // Duplicate array to create seamless infinite scroll
-  const scrollTestimonials = [...testimonials, ...testimonials];
-
   return (
-    <section className="py-20 relative bg-white dark:from-gray-800 dark:to-gray-900 overflow-hidden">
+    <section className="relative py-24 bg-white overflow-hidden">
+      {/* Decorative floating shapes */}
+      <div className="absolute -top-16 -left-16 w-40 h-40 bg-blue-100 rounded-full opacity-40 blur-3xl"></div>
+      <div className="absolute -bottom-24 -right-12 w-60 h-60 bg-pink-100 rounded-full opacity-30 blur-3xl"></div>
+
       {/* Header */}
-      <div className="text-center max-w-3xl mx-auto mb-12 px-4">
-        <h2 className="text-4xl font-bold text-gray-800 dark:text-white mb-4">
+      <div className="text-center max-w-3xl mx-auto mb-16 px-4">
+        <h2 className="text-3xl font-bold text-gray-900 mb-4">
           What Our Clients Say
         </h2>
-        <p className="text-gray-600 dark:text-gray-300 text-lg">
+        <p className="text-gray-600 text-base">
           Real experiences from people who found their dream homes and investments with us.
         </p>
       </div>
 
-      {/* Continuous Scroll Container */}
-      <motion.div
-        className="flex gap-6"
-        style={{ display: "flex" }}
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{
-          repeat: Infinity,
-          repeatType: "loop",
-          duration: 40,
-          ease: "linear",
-        }}
-      >
-        {scrollTestimonials.map((testimonial, index) => (
+      {/* Masonry / Bento Grid with overlap */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-4 sm:px-6 lg:px-8">
+        {testimonials.map((t, i) => (
           <div
-            key={index}
-            className="flex-shrink-0 w-72 sm:w-80 md:w-80 bg-white dark:from-gray-800 dark:to-gray-700 shadow-lg rounded-2xl p-8 text-center flex flex-col items-center"
+            key={t.id}
+            className={`relative bg-white rounded-3xl p-6 shadow-lg transform transition hover:-translate-y-3 hover:scale-105 duration-500`}
+            style={{
+              height: `${220 + t.text.length * 1.1}px`, // irregular heights
+              marginTop: i % 2 === 0 ? '0px' : '20px', // staggered vertical offset
+              zIndex: 10 - i,
+            }}
           >
             <img
-              src={testimonial.image}
-              alt={testimonial.name}
-              className="w-24 h-24 rounded-full object-cover mb-5 border-4 border-gray-100 dark:border-gray-700"
+              src={t.image}
+              alt={t.name}
+              className="w-20 h-20 rounded-full object-cover mb-4 border-4 border-white shadow-md"
             />
-            <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-              {testimonial.name}
-            </h3>
-            <p className="text-gray-500 dark:text-gray-400 text-sm mb-3">{testimonial.role}</p>
-            <div className="flex justify-center mb-4 text-yellow-400">
-              {[...Array(testimonial.rating)].map((_, i) => (
+            <h3 className="text-lg font-semibold text-gray-900">{t.name}</h3>
+            <p className="text-gray-500 text-sm mb-3">{t.role}</p>
+            <div className="flex mb-3 text-yellow-400">
+              {[...Array(t.rating)].map((_, i) => (
                 <FaStar key={i} />
               ))}
             </div>
-            <p className="text-gray-600 dark:text-gray-300 text-base leading-relaxed">
-              “{testimonial.text}”
-            </p>
+            <p className="text-gray-700 text-sm leading-relaxed">{t.text}</p>
           </div>
         ))}
-      </motion.div>
+      </div>
+
+      {/* CTA Button */}
+      <div className="text-center mt-16">
+        <button className="bg-blue-600 text-white px-8 py-3 rounded-full text-base font-semibold shadow-md hover:bg-blue-700 hover:scale-105 transition-transform duration-300">
+          Share Your Experience
+        </button>
+      </div>
     </section>
   );
 }
